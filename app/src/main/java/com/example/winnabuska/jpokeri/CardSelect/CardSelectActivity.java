@@ -65,6 +65,7 @@ public class CardSelectActivity extends Activity {
                         float xSwipe = xPress - xLift;
                         float ySwipe = yPress - yLift;
                         if ((Math.sqrt(xSwipe * xSwipe + ySwipe * ySwipe)) > 60) {
+                            //Select cards
                             if (Math.abs(xSwipe) > Math.abs(ySwipe)) {
                                 if (xSwipe > 0)
                                     cardSwitcher.onSwipe(imageButtons.indexOf(currentView), "left");
