@@ -1,0 +1,73 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="card_imagebutton_style">
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+    <style name="stake_style">
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:src">@drawable/panos04</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:radius">50dp</item>
+        <item name="android:clipToPadding">true</item>
+    </style>
+    <style name="card_imagebutton_lockactivity_style">
+        <item name="android:src">@drawable/card_backside</item>
+        <!--<item name="android:layout_weight">1</item>-->
+        <item name="android:layout_height">110dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:shape">rectangle</item>
+    </style>
+    <style name="card_images_loading">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">70dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:shape">rectangle</item>
+        <item name="android:src">@drawable/card_backside</item>
+    </style>
+    <style name="Theme_Dialog" parent="android:Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    <style name="number_info_textview_style">
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">right</item>
+        <item name="android:textColor">@color/Black</item>
+    </style>
+    <style name="text_info_textview_style">
+        <item name="android:textColor">@color/Black</item>
+    </style>
+
+    <style name="case_text_textview">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/textview_visible_borders</item>
+    </style>
+    <style name="case_number_textview" parent="case_text_textview">
+        <item name="android:text">000000000</item>
+    </style>
+</resources>

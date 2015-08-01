@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/loading_images"
+    android:keepScreenOn="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/card_loading_image1"
+            style="@style/card_images_loading"/>
+        <ImageView
+            android:id="@+id/card_loading_image2"
+            style="@style/card_images_loading"/>
+        <ImageView
+            android:id="@+id/card_loading_image3"
+            style="@style/card_images_loading"/>
+        <ImageView
+            android:id="@+id/card_loading_image4"
+            style="@style/card_images_loading"/>
+        <ImageView
+            android:id="@+id/card_loading_image5"
+            style="@style/card_images_loading"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/load_info_tv"
+        android:textColor="@color/Red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:paddingTop="10dp"
+        android:id="@+id/primaryBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:paddingBottom="10dp"
+        />
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:id="@+id/secondaryBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        />
+    <Button
+        android:text="Takaisin"
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+

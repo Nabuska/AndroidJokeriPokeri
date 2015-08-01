@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="win_hand_names_lang_finnish">
+        <item>0</item>
+        <item>parit</item>
+        <item>3s</item>
+        <item>suora</item>
+        <item>väri</item>
+        <item>täyskäsi</item>
+        <item>4s</item>
+        <item>värisuora</item>
+        <item>5s</item>
+    </string-array>
+
+    <integer-array name="chart_colors">
+        <item>@color/Black</item>
+        <item>@color/Lavender</item>
+        <item>@color/MediumBlue</item>
+        <item>@color/DarkOrange</item>
+        <item>@color/MediumOrchid</item>
+        <item>@color/ForestGreen</item>
+        <item>@color/Turquoise</item>
+        <item>@color/GoldYellow</item>
+        <item>@color/Red</item>
+    </integer-array>
+
+    <string-array name="bet_amounts">
+        <item>0.4</item>
+        <item>0.8</item>
+        <item>1.2</item>
+        <item>1.6</item>
+        <item>2.0</item>
+        <item>2.4</item>
+        <item>2.8</item>
+        <item>3.2</item>
+        <item>3.6</item>
+    </string-array>
+</resources>

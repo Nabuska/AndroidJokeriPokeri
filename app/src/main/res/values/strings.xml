@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">JPokeri</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="info_textview">Vaihtaaksesi...\nArvoa: \tpyyhkäise ylös/alas\nMaata:\tpyyhkäise oikealle/vasenmalle\nJokeri:\tpitkäpainallus\nPaina laske saadaksesi lisätietoja</string>
+    <string name="title_activity_chart">ChartActivity</string>
+    <string name="title_activity_card_lock">CardLockActivity</string>
+    <string name="first_use_message">"VALMISTELLAAN ENSIMMAISTA KAYTTOA. ODOTUS n.20s"</string>
+    <string name="exceptional_hand_pattern_message">HARVINAINEN TAPAUS. KESTAA HETKEN PIDEMPAAN...</string>
+
+</resources>
