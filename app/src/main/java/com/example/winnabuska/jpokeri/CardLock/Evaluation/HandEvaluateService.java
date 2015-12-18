@@ -2,8 +2,9 @@ package com.example.winnabuska.jpokeri.CardLock.Evaluation;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.example.winnabuska.jpokeri.Card;
 import com.example.winnabuska.jpokeri.Dealer;
 import com.example.winnabuska.jpokeri.R;
@@ -31,7 +32,6 @@ public class HandEvaluateService extends IntentService {
 
     private Card[] handCards;
     private Card[] deckCards;
-    private Scoring scoring;
     private CardSwitchOption [] cardSwitchOptions;
 
     public HandEvaluateService(){
@@ -48,9 +48,10 @@ public class HandEvaluateService extends IntentService {
         for(int i = 0; i<5; i++)
             handCards[i] = (Card) objCards[i];
 
-        deckCards = new Dealer().getCards();
-        scoring = new Scoring();
-        filterAllHandCardsFromDeck();
+        deckCards = Stream.of(Dealer.cards)
+                        .filter(dc -> Stream.of(handCards).noneMatch(c -> c==dc))
+                        .collect(Collectors.toList())
+                        .toArray(new Card[Dealer.cards.size()-5]);
 
         String command = intent.getStringExtra("command");
         Intent startIntent = new Intent(EVALUATION_STARTS);
@@ -66,11 +67,10 @@ public class HandEvaluateService extends IntentService {
             for (int i = cardSwitchOptions.length - 1; i >= 0; i--) {
                 Intent middleAnnouncement = new Intent(NEW_PATTERN_EVALUATION);
                 middleAnnouncement.putExtra(PATTERN_BOOLEAN_ARRAY, cardSwitchOptions[i].getSwitchPattern());
-                middleAnnouncement.putExtra(CASES_IN_PATTERN, calculateNumberOfCases(cardSwitchOptions[i]));
+                middleAnnouncement.putExtra(CASES_IN_PATTERN, cardSwitchOptions[i].getNumberOfDifferentOutcomes());
                 HandEvaluateService.this.sendBroadcast(middleAnnouncement);
-                calculateAvgValue(cardSwitchOptions[i]);
+                calculateExpectedValue(cardSwitchOptions[i]);
             }
-            Log.i("info", "duration = " + (startTime - System.currentTimeMillis()));
 
             Intent endAnnoucement = new Intent(ALL_PATTERNS_EVALUATED);
             endAnnoucement.putExtra(SWITCHOPTIONS, cardSwitchOptions);
@@ -93,40 +93,24 @@ public class HandEvaluateService extends IntentService {
 
         Intent middleAnnouncement = new Intent(NEW_PATTERN_EVALUATION);
         middleAnnouncement.putExtra(PATTERN_BOOLEAN_ARRAY, changeAllCards.getSwitchPattern());
-        middleAnnouncement.putExtra(CASES_IN_PATTERN, calculateNumberOfCases(changeAllCards));
+        middleAnnouncement.putExtra(CASES_IN_PATTERN, changeAllCards.getNumberOfDifferentOutcomes());
         HandEvaluateService.this.sendBroadcast(middleAnnouncement);
 
-        calculateAvgValue(changeAllCards);
+        calculateExpectedValue(changeAllCards);
         return changeAllCards;
     }
 
-    private void filterAllHandCardsFromDeck(){
-        Card [] filteredDeck = new Card[deckCards.length-handCards.length];
-        int index = 0;
-        for(int i = 0; i<deckCards.length; i++) {
-            for (int j = 0; j < handCards.length &&
-                    (handCards[j].getNumericalSuit() != deckCards[i].getNumericalSuit() || handCards[j].getValue() != deckCards[i].getValue()); j++){
-                if (j == 4) {
-                    filteredDeck[index] = deckCards[i];
-                    index++;
-                }
-            }
-        }
-        deckCards = filteredDeck;
-    }
-
     private void defineEveryCardSwitch(){
-
         CardDataBaseAdapter dataBaseAdapter = new CardDataBaseAdapter(getApplicationContext());
         dataBaseAdapter.open();
         if(dataBaseAdapter.countRows() != CardDataBaseAdapter.EXPECTED_ROWS_SIZE){
             Intent extraAnnouncement = new Intent(EXTRA_INFO);
             extraAnnouncement.putExtra(EXTRA_INFO, getApplicationContext().getString(R.string.first_use_message));
             HandEvaluateService.this.sendBroadcast(extraAnnouncement);
-            dataBaseAdapter.insertDatabaseLinesFromRawFile();
+            dataBaseAdapter.initializeDatabaseContent();
         }
         int optionsSize = 31;
-        if(dataBaseAdapter.matchesExceptionRow(handCards)){
+        if(dataBaseAdapter.matchesExceptionCase(handCards)){
             Intent extraAnnouncement = new Intent(EXTRA_INFO);
             extraAnnouncement.putExtra(EXTRA_INFO, getApplicationContext().getString(R.string.exceptional_hand_pattern_message));
             HandEvaluateService.this.sendBroadcast(extraAnnouncement);
@@ -154,23 +138,9 @@ public class HandEvaluateService extends IntentService {
                         }
     }
 
-    //return the number of how many times calculateAvgValue(switchPattern) will call 'scoring.getHandRanking(handCopy)'
-    //before this method is called, all the handcards have to be filtered from the deck
-    private int calculateNumberOfCases(CardSwitchOption option){
-        int numberOfSwitchCards = option.getindexOfEverySwitch().length;
-        int numberOfCases = 1;
+    private void calculateExpectedValue(CardSwitchOption switchOption) {
 
-        for(int i = deckCards.length; i>deckCards.length-numberOfSwitchCards; i--)
-            numberOfCases *= i;
-        for(int i = numberOfSwitchCards; i > 1; i--)
-            numberOfCases/=i;
-
-        return numberOfCases;
-    }
-
-    private void calculateAvgValue(CardSwitchOption switchOption) {
-
-        int[] everySwitchCardIndex = switchOption.getindexOfEverySwitch();
+        int[] everySwitchCardIndex = switchOption.everySwitchIndex;
         int numberOfSwitchCards = everySwitchCardIndex.length;
         int loops = 1;
         if (numberOfSwitchCards > 0) {
@@ -179,7 +149,7 @@ public class HandEvaluateService extends IntentService {
             byte [] indexes = new byte[6];
             indexes[5] = -1;
             byte[] outerloopIndexes = getNextOuterloopIndexes(switchPattern);
-            Card[] handCopy = copyHandCards(handCards);
+            Card[] handCopy = handCards.clone();
 
             for (indexes[0] = (byte) (1 + indexes[outerloopIndexes[0]]); indexes[0] <= loopMax[0]; indexes[0]++) {
                 if(switchPattern[0])
@@ -196,7 +166,7 @@ public class HandEvaluateService extends IntentService {
                             for (indexes[4] = (byte) (1 + indexes[outerloopIndexes[4]]); indexes[4] <= loopMax[4]; indexes[4]++) {
                                 if(switchPattern[4])
                                     handCopy[4] = deckCards[indexes[4]];
-                                switchOption.addScoreRanking(scoring.getHandRanking(handCopy));
+                                switchOption.outcomes[Scoring.getHandRanking(handCopy)]++;
                                 if(loops % 20000 == 0){
                                     Intent progressAnnouncement = new Intent(PATTERN_PROGRESS);
                                     progressAnnouncement.putExtra(SINGLE_PATTERN_PROGRESS, loops);
@@ -209,7 +179,7 @@ public class HandEvaluateService extends IntentService {
                 }
             }
         } else {
-            switchOption.addScoreRanking(scoring.getHandRanking(handCards));
+            switchOption.outcomes[Scoring.getHandRanking(handCards)]++;
         }
         Intent progressAnnouncement = new Intent(PATTERN_PROGRESS);
         progressAnnouncement.putExtra(SINGLE_PATTERN_PROGRESS, loops);
@@ -248,12 +218,6 @@ public class HandEvaluateService extends IntentService {
             else max[i] = 0;
         }
         return max;
-    }
-
-    private Card [] copyHandCards(Card [] handCards){
-        Card [] copy = new Card[handCards.length];
-        System.arraycopy(handCards, 0, copy, 0, handCards.length);
-        return copy;
     }
 
     @Override

@@ -2,11 +2,15 @@ package com.example.winnabuska.jpokeri.CardSelect;
 
 import android.content.Context;
 import android.os.Vibrator;
+import android.widget.ImageButton;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.example.winnabuska.jpokeri.Card;
 import com.example.winnabuska.jpokeri.Dealer;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by WinNabuska on 12.7.2015.
@@ -15,14 +19,12 @@ public class CardSwitcher {
     private final String STILL = "still", LEFT = "left", RIGHT = "right", UP = "up", DOWN = "down";
     private CardSelectActivity cardSelectActivity;
     private Card[]cards;
-    private Dealer dealer;
     private Card[]cardsUnderJoker;
     private HashMap<String, int[]> animationParams;
 
     public CardSwitcher(CardSelectActivity cardSelectActivity){
         this.cardSelectActivity = cardSelectActivity;
-        dealer = new Dealer();
-        cards = dealer.giveARandomHand();
+        cards = Dealer.giveARandomHand();
         cardsUnderJoker = new Card[5];
         initializeAnimationParams();
         for(int i = 0; i<(cards).length; i++) {
@@ -33,7 +35,6 @@ public class CardSwitcher {
 
     public CardSwitcher(CardSelectActivity cardSelectActivity, Card[]cards, Card[] cardsUnderJoker){
         this.cardSelectActivity = cardSelectActivity;
-        dealer = new Dealer();
         this.cards = cards;
         this.cardsUnderJoker = cardsUnderJoker;
         initializeAnimationParams();
@@ -46,7 +47,7 @@ public class CardSwitcher {
             cards[index] = cardsUnderJoker[index];
         else{
             cardsUnderJoker[index] = cards[index];
-            cards[index] = dealer.getJoker();
+            cards[index] = Dealer.getJoker();
         }
         changeCardsImage(index, animationParams.get(STILL));
     }
@@ -55,10 +56,10 @@ public class CardSwitcher {
         vibrate(new long[]{100, 20, 100});
         if(cards[index].getNumericalSuit() != Card.SUIT_JOKER) {
             switch (swipeDirection) {
-                case (DOWN):  cards[index] = dealer.getNextValueCard(cards[index]);    break;
-                case (UP):    cards[index] = dealer.getPrevValueCard(cards[index]);    break;
-                case (RIGHT): cards[index] = dealer.getNextSuitCard(cards[index]);     break;
-                case (LEFT):  cards[index] = dealer.getPrevSuitCard(cards[index]);     break;
+                case (DOWN):  cards[index] = Dealer.getNextValueCard(cards[index]);    break;
+                case (UP):    cards[index] = Dealer.getPrevValueCard(cards[index]);    break;
+                case (RIGHT): cards[index] = Dealer.getNextSuitCard(cards[index]);     break;
+                case (LEFT):  cards[index] = Dealer.getPrevSuitCard(cards[index]);     break;
             }
         }
         else{
@@ -69,18 +70,16 @@ public class CardSwitcher {
 
     private void changeCardsImage(int index , int [] currentAnimationParams){
         cardSelectActivity.setImageButtonImage(index, getImageRecourcesID(cards[index]), currentAnimationParams);
-
         for(int i = 0; i<5 ; i++)
             cardSelectActivity.setCardButtonFogged(false, i);
-        cardSelectActivity.setRecomendationBtnEnability(true);
-        cardSelectActivity.setRecomendationBtnFogged(false);
+        cardSelectActivity.setCalculateButtonEnability(true);
+
         for(int i = 0; i<4;i++) {
             for (int j = 1 + i; j < 5; j++) {
                 if (cards[i] == cards[j]) {
                     cardSelectActivity.setCardButtonFogged(true, i);
                     cardSelectActivity.setCardButtonFogged(true, j);
-                    cardSelectActivity.setRecomendationBtnEnability(false);
-                    cardSelectActivity.setRecomendationBtnFogged(true);
+                    cardSelectActivity.setCalculateButtonEnability(false);
                     break;
                 }
             }
@@ -90,9 +89,9 @@ public class CardSwitcher {
     private int getImageRecourcesID(Card card){
         String imageName;
         if(card.getNumericalSuit()!=Card.SUIT_JOKER) {
-            imageName = card.getSuit()+card.getValue();
+            imageName = card.getSuitName()+card.getValue();
         }else{
-            imageName = card.getSuit();
+            imageName = card.getSuitName();
         }
         Context context = cardSelectActivity.getApplicationContext();
         return context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
@@ -116,65 +115,4 @@ public class CardSwitcher {
         animationParams.put(LEFT, new int[]{0, -100, 0, 0});
         animationParams.put(STILL, null);
     }
-
-
-    /*protected void onSwipeLeft(int i) {
-        selectedAnimationParams = animationParams.get("left");
-        if (cards[i].getNumericalSuit() == Card.SUIT_JOKER) {
-            changeCard(i, cardsUnderJoker[i]);
-        }else{
-            changeCard(i, dealer.getPrevSuitCard(cards[i]));
-        }
-    }
-    protected void onSwipeRight(int i) {
-        selectedAnimationParams = animationParams.get("right");
-        if (cards[i].getNumericalSuit() == Card.SUIT_JOKER) {
-            changeCard(i, cardsUnderJoker[i]);
-        }else{
-            changeCard(i, dealer.getNextSuitCard(cards[i]));
-        }
-    }
-    protected void onSwipeUp(int i) {
-        selectedAnimationParams = animationParams.get("up");
-        if (cards[i].getNumericalSuit() == Card.SUIT_JOKER) {
-            changeCard(i, cardsUnderJoker[i]);
-        }else{
-            changeCard(i, dealer.getPrevValueCard(cards[i]));
-        }
-    }
-
-    protected void onSwipeDown(int i) {
-        selectedAnimationParams = animationParams.get("down");
-        if (cards[i].getNumericalSuit() == Card.SUIT_JOKER) {
-            changeCard(i, cardsUnderJoker[i]);
-        }else{
-            changeCard(i, dealer.getNextValueCard(cards[i]));
-        }
-    }
-    private void changeCard(int index, Card newCard){
-
-        cards[index] = newCard;
-        cardSelectActivity.setImageButtonImage(index, correspondingImage(newCard), selectedAnimationParams);
-
-        boolean hasDuplicates = false;
-
-        for(int i = 0; i<5; i++) {
-            cardSelectActivity.setCardButtonFogged(false, i);
-        }
-        for(int i = 0; i<4;i++) {
-            for (int j = 1 + i; j < 5; j++) {
-                if (cards[i] == cards[j]) {
-                    cardSelectActivity.setCardButtonFogged(true, i);
-                    cardSelectActivity.setCardButtonFogged(true, j);
-                    hasDuplicates = true;
-                }
-            }
-        }
-        if(hasDuplicates) {
-            cardSelectActivity.setRecomendationBtnEnability(false);
-        }
-        else {
-            cardSelectActivity.setRecomendationBtnEnability(true);
-        }
-    }*/
 }

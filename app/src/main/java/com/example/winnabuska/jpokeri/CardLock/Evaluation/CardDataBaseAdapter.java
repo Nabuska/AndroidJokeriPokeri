@@ -33,15 +33,14 @@ public class CardDataBaseAdapter {
     public static final String CARD_4 = "card_4";
     public static final int EXPECTED_ROWS_SIZE = 1914;
 
-    protected CardDataBaseAdapter(Context context){
-        Log.i("info", "in database contructor");
+    public CardDataBaseAdapter(Context context){
         this.context = context;
         dbHelper = new MySQLiteHelper(context);
     }
 
     /*Class SQLiteOpenHelper*/
 
-    protected class MySQLiteHelper extends SQLiteOpenHelper {
+    private class MySQLiteHelper extends SQLiteOpenHelper {
 
         private static final String TABLE_CONSTUCTOR =
                 "create table if not exists "+TABLE_NAME+
@@ -70,18 +69,18 @@ public class CardDataBaseAdapter {
 
     /*End of SQLiteOpenHelper*/
 
-    protected void open() throws SQLiteException {
+    public CardDataBaseAdapter open() throws SQLiteException {
         try {
             db = dbHelper.getWritableDatabase();
         }catch (SQLiteException e){
             db = dbHelper.getReadableDatabase();
-            Log.i("info", "COULD NOT OPEN WRITEBLEDATABASE, READABLE DB -->");
         }
         db.execSQL(MySQLiteHelper.TABLE_CONSTUCTOR);
+        return this;
     }
 
-    protected void insertDatabaseLinesFromRawFile(){
-        Log.i("info", "in inserting");
+    public void initializeDatabaseContent(){
+        Log.i("DATABASE_INFO", "inserting");
         dbHelper.onUpgrade(db, 0, 0);
         InputStream inSteam = context.getResources().openRawResource(R.raw.all_exceptional_cardpatterns);
         BufferedReader bufReader = new BufferedReader(new InputStreamReader(inSteam));
@@ -91,12 +90,13 @@ public class CardDataBaseAdapter {
                 String[]data = line.split(";");
                 insertEntry(data);
             }
+            Log.i("DATABASE_INFO", "end");
             inSteam.close();
             bufReader.close();
-        } catch (IOException e) {e.printStackTrace(); Log.i("info", "fail in inserting");}
+        } catch (IOException e) {e.printStackTrace(); Log.i("DATABASE_INFO", "fail in inserting");}
     }
 
-    protected long insertEntry(String [] data){
+    public long insertEntry(String [] data){
         ContentValues newRow = new ContentValues();
         newRow.put(CARD_0, data[0]);
         newRow.put(CARD_1, data[1]);
@@ -106,11 +106,11 @@ public class CardDataBaseAdapter {
         return db.insert(TABLE_NAME, null, newRow);
     }
 
-    protected void close(){
+    public void close(){
         db.close();
     }
 
-    protected boolean matchesExceptionRow(Card[] hand){
+    public boolean matchesExceptionCase(Card[] hand){
         int[]sortedIDs = cardsToSortedIDs(hand);
         int count= db.query(TABLE_NAME, null,
                 CARD_0 + "=" + sortedIDs[0] + " AND " +
@@ -120,7 +120,6 @@ public class CardDataBaseAdapter {
                 CARD_4 + "=" + sortedIDs[4],
                 null, null, null, null).getCount();
         if(count>0) {
-            Log.i("info", "MATCH = " + count);
             return true;
         }
         else return false;

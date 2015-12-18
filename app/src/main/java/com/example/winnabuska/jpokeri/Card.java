@@ -39,7 +39,7 @@ public class Card implements Serializable {
 
     }
 
-    public String getSuit() {
+    public String getSuitName() {
         return suits[suit];
     }
 

@@ -1,5 +1,7 @@
 package com.example.winnabuska.jpokeri;
 
+import com.annimon.stream.Stream;
+
 import java.util.ArrayList;
 
 /**
@@ -7,9 +9,10 @@ import java.util.ArrayList;
  */
 public class Dealer {
 
-    ArrayList<Card> cards;
+    public static ArrayList<Card> cards;
 
-    public Dealer(){
+
+    static {
         try{
             cards = new ArrayList<>();
             for(int i = 1; i < 5; i++){
@@ -22,7 +25,10 @@ public class Dealer {
         }catch(CardException e){e.printStackTrace();}
     }
 
-    public Card[] giveARandomHand(){
+    private Dealer(){
+    }
+
+    public static Card[] giveARandomHand(){
         Card[] newHand = new Card[5];
         for(int i = -1; ++i<newHand.length;){
             newHand[i] = cards.get((int)(Math.random()*cards.size()));
@@ -36,49 +42,43 @@ public class Dealer {
         return newHand;
     }
 
-    public Card[] getCards(){
-        Card[] returnCards = new Card[cards.size()];
-        return cards.toArray(returnCards);
+    public static Card getJoker(){
+        return Stream.of(cards).filter(c -> c.getValue()==0 && c.suit==0).findFirst().get();
     }
 
-    public Card getJoker(){
-        return cards.get(cards.size()-1);
-    }
-
-    public Card getPrevValueCard(Card card){
+    public static Card getPrevValueCard(Card card){
         if(card.getNumericalSuit() != Card.SUIT_JOKER) {
             int nextValue = card.getValue() - 1;
             if (nextValue < 1)
                 nextValue = 13;
-            return findCard(card.getSuit(), nextValue);
+            return findCard(card.getSuitName(), nextValue);
         }
         else
             return card;
     }
 
-    public Card getNextValueCard(Card card){
+    public static Card getNextValueCard(Card card){
         int nextValue = card.getValue() + 1;
         if(card.getNumericalSuit() != Card.SUIT_JOKER) {
             if (nextValue > 13)
                 nextValue = 1;
-            return findCard(card.getSuit(), nextValue);
+            return findCard(card.getSuitName(), nextValue);
         }
         else
             return card;
     }
 
-    private Card findCard(String suit, int value){
+    private static Card findCard(String suit, int value){
         for(Card current: cards)
-            if(current.getValue()==value && current.getSuit().equals(suit))
+            if(current.getValue()==value && current.getSuitName().equals(suit))
                 return current;
         return null;
     }
 
-    public Card getNextSuitCard(Card currentCard){
-
+    public static Card getNextSuitCard(Card currentCard){
         if(currentCard.getNumericalSuit() != Card.SUIT_JOKER) {
             String nextSuite = null;
-            switch (currentCard.getSuit()) {
+            switch (currentCard.getSuitName()) {
                 case ("hearts"):
                     nextSuite = "clubs";
                     break;
@@ -101,10 +101,10 @@ public class Dealer {
             return currentCard;
     }
 
-    public Card getPrevSuitCard(Card currentCard){
+    public static Card getPrevSuitCard(Card currentCard){
         String nextSuite = null;
         if(currentCard.getNumericalSuit() != Card.SUIT_JOKER) {
-            switch (currentCard.getSuit()) {
+            switch (currentCard.getSuitName()) {
                 case ("hearts"):
                     nextSuite = "spades";
                     break;

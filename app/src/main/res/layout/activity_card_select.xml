@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="4dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="2"
     tools:context="com.example.winnabuska.jpokeri.CardSelect.CardSelectActivity">
 
     <RelativeLayout
@@ -13,23 +13,16 @@
         android:id="@+id/upper_layout"
         android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/info"
-            android:textSize="25sp"
-            android:text="@string/info_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:textColor="@color/Black"/>
-
-        <ImageButton
+        <Button
+            android:text="Calculate"
+            android:padding="5dp"
+            android:gravity="top|center"
+            android:background="@drawable/joker_image"
             android:id="@+id/calculate_probabilities_btn"
             android:layout_alignParentRight="true"
-            android:background="@drawable/laske"
             android:scaleType="fitCenter"
             android:layout_height="fill_parent"
-            android:layout_width="100dp"/>
+            android:layout_width="120dp"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,42 +32,23 @@
         android:layout_weight="1"
         android:weightSum="5">
         <ImageButton
-            android:background="@drawable/card_imageview_drawable"
-            android:layout_weight="1"
             android:id="@+id/card_image_0"
-            android:src="@drawable/card_backside"
             style="@style/card_imagebutton_style"
             />
         <ImageButton
-            android:background="@drawable/card_imageview_drawable"
-            android:layout_weight="1"
             android:id="@+id/card_image_1"
-            android:layout_toRightOf="@+id/card_image_0"
-            android:src="@drawable/card_backside"
             style="@style/card_imagebutton_style"
             />
         <ImageButton
-            android:background="@drawable/card_imageview_drawable"
-            android:layout_weight="1"
             android:id="@+id/card_image_2"
-            android:layout_toRightOf="@id/card_image_1"
-            android:src="@drawable/card_backside"
             style="@style/card_imagebutton_style"
             />
         <ImageButton
-            android:background="@drawable/card_imageview_drawable"
-            android:layout_weight="1"
             android:id="@+id/card_image_3"
-            android:layout_toRightOf="@+id/card_image_2"
-            android:src="@drawable/card_backside"
             style="@style/card_imagebutton_style"
             />
         <ImageButton
-            android:background="@drawable/card_imageview_drawable"
-            android:layout_weight="1"
             android:id="@+id/card_image_4"
-            android:layout_toRightOf="@+id/card_image_3"
-            android:src="@drawable/card_backside"
             style="@style/card_imagebutton_style"
             />
     </LinearLayout>

@@ -3,14 +3,18 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="card_imagebutton_style">
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:src">@drawable/card_backside</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:padding">8dp</item>
     </style>
     <style name="stake_style">
         <item name="android:layout_height">100dp</item>

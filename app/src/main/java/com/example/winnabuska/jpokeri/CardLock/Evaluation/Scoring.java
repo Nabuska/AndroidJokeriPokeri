@@ -16,7 +16,7 @@ public class Scoring {
             {NOTHING, TWOPAIRS, THREEOFAKIND, STRAIGHT, FLUSH, FULLHOUSE, FOUROFAKIND, STRAIGHTFLUSH, FIVEOFAKIND};
 
 
-    private final byte SUIT_JOKER, VALUE_JOKER, VALUE_ACE_LOW, VALUE_ACE_HIGH;
+    private static final byte SUIT_JOKER = Card.SUIT_JOKER, VALUE_JOKER = Card.VALUE_JOKER, VALUE_ACE_LOW = Card.VALUE_ACE_LOW, VALUE_ACE_HIGH = Card.VALUE_ACE_HIGH;
 
     public static String [] winHandNames;
     public static void setWinHandNames(String [] names){
@@ -24,14 +24,10 @@ public class Scoring {
     }
 
 
-    public Scoring() {
-        SUIT_JOKER = Card.SUIT_JOKER;
-        VALUE_JOKER = Card.VALUE_JOKER;
-        VALUE_ACE_LOW = Card.VALUE_ACE_LOW;
-        VALUE_ACE_HIGH = Card.VALUE_ACE_HIGH;
+    private Scoring() {
     }
 
-    public int getHandRanking(Card[] cards) {
+    public static int getHandRanking(Card[] cards) {
         byte[] cardValues = new byte[15];
         boolean hasExtraPare = false;
         boolean couldBeStraight = true;
@@ -120,7 +116,7 @@ public class Scoring {
         }
     }
 
-    private boolean isStraightNoJoker(byte[] cardValues) {
+    private static boolean isStraightNoJoker(byte[] cardValues) {
         byte j;
         byte limit;
         for (byte i = 1; i < 10; i++) {
@@ -141,7 +137,7 @@ public class Scoring {
     }
 
     //This method should only be run after it is for sure there are no same value cards in hand
-    private boolean isStraightHasJoker(byte[] cardValues) {
+    private static boolean isStraightHasJoker(byte[] cardValues) {
         byte singlesWithinFive;
         for (byte i = 1; i < 10; i++) {
             if (cardValues[i] > 0) {

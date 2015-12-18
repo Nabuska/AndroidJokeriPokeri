@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.annimon.stream.Stream;
 import com.example.winnabuska.jpokeri.Card;
 import com.example.winnabuska.jpokeri.R;
 import com.github.mikephil.charting.charts.BarChart;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 
 public class CardLockActivity extends Activity {
 
-    private ArrayList<ImageButton> lockCards;
+    private ArrayList<ImageButton> cardImageButtons;
     private View progressDialogCustomView;
     private BarChart probabilityBarChart;
     private BarChart valueBarChart;
@@ -48,6 +49,51 @@ public class CardLockActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_lock);
+
+        initProgressDialog();
+        initTextualDescriptions();
+
+        expected_value_textview = ((TextView) findViewById(R.id.expected_value_textview));
+
+        probabilityBarChart = (BarChart) findViewById(R.id.probability_barchart);
+        probabilityBarChart.animateXY(200, 200);
+        probabilityBarChart.setDescription("");
+        probabilityBarChart.getAxisRight().setEnabled(false);
+        probabilityBarChart.getXAxis().setTextSize(1);
+
+        valueBarChart = (BarChart) findViewById(R.id.value_barchart);
+        valueBarChart.animateXY(200, 200);
+        valueBarChart.getAxisRight().setEnabled(false);
+        valueBarChart.setDescription("");
+        valueBarChart.getXAxis().setSpaceBetweenLabels(0);
+        valueBarChart.getXAxis().setTextSize(1);
+
+        cardImageButtons = new ArrayList<>();
+        cardImageButtons.add((ImageButton) findViewById(R.id.lockactivity_card_image_0));
+        cardImageButtons.add((ImageButton) findViewById(R.id.lockactivity_card_image_1));
+        cardImageButtons.add((ImageButton) findViewById(R.id.lockactivity_card_image_2));
+        cardImageButtons.add((ImageButton) findViewById(R.id.lockactivity_card_image_3));
+        cardImageButtons.add((ImageButton) findViewById(R.id.lockactivity_card_image_4));
+        controller = new CardLockController(this);
+        for(ImageView current: cardImageButtons){
+            current.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    controller.cardImageClicked(cardImageButtons.indexOf(v));
+                }
+            });
+        }
+
+        changeBetBtn = (Button) findViewById(R.id.change_bet_btn);
+        changeBetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.betButtonClick();
+            }
+        });
+    }
+
+    private void initProgressDialog(){
         dialog = new Dialog(CardLockActivity.this);
         final LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         progressDialogCustomView = inflater.inflate(R.layout.loading_dialog, null);
@@ -75,8 +121,9 @@ public class CardLockActivity extends Activity {
                     }
                 });
         dialog.show();
+    }
 
-
+    private void initTextualDescriptions(){
         descriptions = new ArrayList<>();
         descriptions.add((TextView) findViewById(R.id.text_info_0));
         descriptions.add((TextView) findViewById(R.id.text_info_1));
@@ -100,45 +147,6 @@ public class CardLockActivity extends Activity {
         numbers.add((TextView) findViewById(R.id.info_numbers_7));
         numbers.add((TextView) findViewById(R.id.info_numbers_8));
         numbers.add((TextView) findViewById(R.id.info_numbers_9));
-
-        expected_value_textview = ((TextView) findViewById(R.id.expected_value_textview));
-
-        probabilityBarChart = (BarChart) findViewById(R.id.probability_barchart);
-        probabilityBarChart.animateXY(200, 200);
-        probabilityBarChart.setDescription("");
-        probabilityBarChart.getAxisRight().setEnabled(false);
-        probabilityBarChart.getXAxis().setTextSize(1);
-
-        valueBarChart = (BarChart) findViewById(R.id.value_barchart);
-        valueBarChart.animateXY(200, 200);
-        valueBarChart.getAxisRight().setEnabled(false);
-        valueBarChart.setDescription("");
-        valueBarChart.getXAxis().setSpaceBetweenLabels(0);
-        valueBarChart.getXAxis().setTextSize(1);
-
-        lockCards = new ArrayList<>();
-        lockCards.add((ImageButton) findViewById(R.id.lockactivity_card_image_0));
-        lockCards.add((ImageButton) findViewById(R.id.lockactivity_card_image_1));
-        lockCards.add((ImageButton) findViewById(R.id.lockactivity_card_image_2));
-        lockCards.add((ImageButton) findViewById(R.id.lockactivity_card_image_3));
-        lockCards.add((ImageButton) findViewById(R.id.lockactivity_card_image_4));
-        controller = new CardLockController(this);
-        for(ImageView current:lockCards){
-            current.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    controller.cardImageClicked(lockCards.indexOf(v));
-                }
-            });
-        }
-
-        changeBetBtn = (Button) findViewById(R.id.change_bet_btn);
-        changeBetBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controller.betButtonClick();
-            }
-        });
     }
 
     protected void setChangeBetButtonText(String text){
@@ -158,7 +166,7 @@ public class CardLockActivity extends Activity {
     }
 
     protected void setLockCardImage(int index, String card){
-        lockCards.get(index).setImageResource(CardLockActivity.this.getResources().getIdentifier(card, "drawable", CardLockActivity.this.getPackageName()));
+        cardImageButtons.get(index).setImageResource(CardLockActivity.this.getResources().getIdentifier(card, "drawable", CardLockActivity.this.getPackageName()));
     }
 
     protected void initializePrimaryProgressBar(int progressMax){
@@ -221,18 +229,12 @@ public class CardLockActivity extends Activity {
         ((TextView)progressDialogCustomView.findViewById(R.id.load_info_tv)).setText(extraLoadInfo);
     }
 
-    protected void setTextInfo(int [] allCases){
-        for (int i = 0; i < numbers.size(); i++) {
-            int textColor;
-            numbers.get(i).setText(String.valueOf(allCases[i]));
-            if (allCases[i] == 0) {
-                textColor = getResources().getColor(R.color.LightGrey);
-            } else {
-                textColor = getResources().getColor(R.color.Black);
-            }
-            numbers.get(i).setTextColor(textColor);//Black
-            descriptions.get(i).setTextColor(textColor);
-        }
+
+    protected void setTextInfo(int caseNumber, int total){
+        int textColor = total==0 ? getResources().getColor(R.color.LightGrey) : getResources().getColor(R.color.Black);
+        numbers.get(caseNumber).setText(String.valueOf(total));
+        numbers.get(caseNumber).setTextColor(textColor);
+        descriptions.get(caseNumber).setTextColor(textColor);
     }
 
     protected void setExpectedValueText(String text){

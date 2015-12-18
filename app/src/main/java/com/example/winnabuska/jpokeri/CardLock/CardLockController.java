@@ -167,7 +167,7 @@ public class CardLockController {
                     selectedOptionFound = true;
                     selectedOption = option;
                 }
-                else//so far so good
+                else
                     continue;
             }
             if(selectedOptionFound)
@@ -260,13 +260,10 @@ public class CardLockController {
     }
 
     private void refreshTextInfo(){
-        int[]outcomes = new int[10];
-
-        outcomes[0] = selectedOption.getNumberOfDifferentOutcomes();
-        for(int i = 0; i<9; i++){
-            outcomes[i+1] = selectedOption.getRankCount(i);
+        cardLockActivity.setTextInfo(0, selectedOption.getNumberOfDifferentOutcomes());
+        for(int i = 0; i<selectedOption.outcomes.length; i++){
+            cardLockActivity.setTextInfo(i+1, selectedOption.outcomes[i]);
         }
-        cardLockActivity.setTextInfo(outcomes);
     }
 
     private void refreshExpectedValueInfo(){

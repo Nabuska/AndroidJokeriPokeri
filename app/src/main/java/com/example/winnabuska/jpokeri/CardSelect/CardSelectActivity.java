@@ -2,31 +2,37 @@ package com.example.winnabuska.jpokeri.CardSelect;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.winnabuska.jpokeri.Card;
 import com.example.winnabuska.jpokeri.CardLock.CardLockActivity;
+import com.example.winnabuska.jpokeri.CardLock.Evaluation.CardDataBaseAdapter;
 import com.example.winnabuska.jpokeri.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class CardSelectActivity extends Activity {
-    private ArrayList<ImageButton> imageButtons;
-    private ImageButton calculateProbabilitiesBtn;
+    protected ArrayList<ImageButton> imageButtons;
+    protected Button calculateProbabilitiesBtn;
     private CardSwitcher cardSwitcher;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_select);
+
         imageButtons = new ArrayList<>();
         imageButtons.add((ImageButton) findViewById(R.id.card_image_0));
         imageButtons.add((ImageButton) findViewById(R.id.card_image_1));
@@ -45,7 +51,6 @@ public class CardSelectActivity extends Activity {
                 cards[i] = (Card)objCards[i];
                 cardsUnderJoker[i] = (Card)objCardsUnderJoker[i];
             }
-
             cardSwitcher = new CardSwitcher(this, cards, cardsUnderJoker);
         }
 
@@ -91,7 +96,7 @@ public class CardSelectActivity extends Activity {
                 }
             });
         }
-        calculateProbabilitiesBtn = (ImageButton) findViewById(R.id.calculate_probabilities_btn);
+        calculateProbabilitiesBtn = (Button) findViewById(R.id.calculate_probabilities_btn);
         calculateProbabilitiesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,19 +115,16 @@ public class CardSelectActivity extends Activity {
     }
 
     protected void setCardButtonFogged(boolean transparent, int index){
-        if(transparent)
+        float currentAlpha = imageButtons.get(index).getAlpha();
+        if(transparent && currentAlpha!=25)
             imageButtons.get(index).setAlpha(25);
-        else
-            imageButtons.get(index).setAlpha(1000);
+        else if(currentAlpha!=255)
+            imageButtons.get(index).setAlpha(255);
     }
 
-    protected void setRecomendationBtnEnability(boolean enabled){
+    protected void setCalculateButtonEnability(boolean enabled){
         calculateProbabilitiesBtn.setEnabled(enabled);
-    }
-
-    protected void setRecomendationBtnFogged(boolean fogged){
-        if(fogged) calculateProbabilitiesBtn.getBackground().setAlpha(15);
-        else calculateProbabilitiesBtn.getBackground().setAlpha(1000);
+        calculateProbabilitiesBtn.getBackground().setAlpha(enabled ? 255 : 15);
     }
 
     protected void setImageButtonImage(final int index, final int imageResources, int[] animationParams){
