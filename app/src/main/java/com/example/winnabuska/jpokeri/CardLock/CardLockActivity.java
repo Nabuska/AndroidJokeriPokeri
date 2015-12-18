@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.annimon.stream.Stream;
 import com.example.winnabuska.jpokeri.Card;
 import com.example.winnabuska.jpokeri.R;
 import com.github.mikephil.charting.charts.BarChart;
@@ -125,28 +124,28 @@ public class CardLockActivity extends Activity {
 
     private void initTextualDescriptions(){
         descriptions = new ArrayList<>();
-        descriptions.add((TextView) findViewById(R.id.text_info_0));
-        descriptions.add((TextView) findViewById(R.id.text_info_1));
-        descriptions.add((TextView) findViewById(R.id.text_info_2));
-        descriptions.add((TextView) findViewById(R.id.text_info_3));
-        descriptions.add((TextView) findViewById(R.id.text_info_4));
-        descriptions.add((TextView) findViewById(R.id.text_info_5));
-        descriptions.add((TextView) findViewById(R.id.text_info_6));
-        descriptions.add((TextView) findViewById(R.id.text_info_7));
-        descriptions.add((TextView) findViewById(R.id.text_info_8));
-        descriptions.add((TextView) findViewById(R.id.text_info_9));
+        descriptions.add((TextView) findViewById(R.id.total_info_textview));
+        descriptions.add((TextView) findViewById(R.id.nothing_info_textview));
+        descriptions.add((TextView) findViewById(R.id.twopares_info_textview));
+        descriptions.add((TextView) findViewById(R.id.threeofakind_info_textview));
+        descriptions.add((TextView) findViewById(R.id.straights_info_textview));
+        descriptions.add((TextView) findViewById(R.id.flush_info_textview));
+        descriptions.add((TextView) findViewById(R.id.fullhouse_info_textview));
+        descriptions.add((TextView) findViewById(R.id.fourofakind_info_textview));
+        descriptions.add((TextView) findViewById(R.id.straightflush_info_textview));
+        descriptions.add((TextView) findViewById(R.id.fiveofakind_info_textview));
 
         numbers = new ArrayList<>();
-        numbers.add((TextView) findViewById(R.id.number_of_total_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_nothing_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_twopares_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_threeofakind_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_straights_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_flush_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_fullhouse_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_fourofakind_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_straightflush_cases_textview));
-        numbers.add((TextView) findViewById(R.id.number_of_fiveofakind_cases_textview));
+        numbers.add((TextView) findViewById(R.id.info_numbers_0));
+        numbers.add((TextView) findViewById(R.id.info_numbers_1));
+        numbers.add((TextView) findViewById(R.id.info_numbers_2));
+        numbers.add((TextView) findViewById(R.id.info_numbers_3));
+        numbers.add((TextView) findViewById(R.id.info_numbers_4));
+        numbers.add((TextView) findViewById(R.id.info_numbers_5));
+        numbers.add((TextView) findViewById(R.id.info_numbers_6));
+        numbers.add((TextView) findViewById(R.id.info_numbers_7));
+        numbers.add((TextView) findViewById(R.id.info_numbers_8));
+        numbers.add((TextView) findViewById(R.id.info_numbers_9));
     }
 
     protected void setChangeBetButtonText(String text){
