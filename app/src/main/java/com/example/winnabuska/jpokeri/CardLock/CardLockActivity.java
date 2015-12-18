@@ -137,16 +137,16 @@ public class CardLockActivity extends Activity {
         descriptions.add((TextView) findViewById(R.id.text_info_9));
 
         numbers = new ArrayList<>();
-        numbers.add((TextView) findViewById(R.id.info_numbers_0));
-        numbers.add((TextView) findViewById(R.id.info_numbers_1));
-        numbers.add((TextView) findViewById(R.id.info_numbers_2));
-        numbers.add((TextView) findViewById(R.id.info_numbers_3));
-        numbers.add((TextView) findViewById(R.id.info_numbers_4));
-        numbers.add((TextView) findViewById(R.id.info_numbers_5));
-        numbers.add((TextView) findViewById(R.id.info_numbers_6));
-        numbers.add((TextView) findViewById(R.id.info_numbers_7));
-        numbers.add((TextView) findViewById(R.id.info_numbers_8));
-        numbers.add((TextView) findViewById(R.id.info_numbers_9));
+        numbers.add((TextView) findViewById(R.id.number_of_total_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_nothing_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_twopares_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_threeofakind_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_straights_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_flush_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_fullhouse_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_fourofakind_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_straightflush_cases_textview));
+        numbers.add((TextView) findViewById(R.id.number_of_fiveofakind_cases_textview));
     }
 
     protected void setChangeBetButtonText(String text){

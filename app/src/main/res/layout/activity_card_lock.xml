@@ -4,36 +4,33 @@
     android:layout_height="match_parent"
     android:shrinkColumns="*"
     android:stretchColumns="*"
-    android:background="#ffffff">
+    android:background="@android:color/transparent">
 
-    <TableRow>
-        <LinearLayout
-            android:padding="5dp"
-            android:id="@+id/non_graphical_info_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="210dp"
-            android:weightSum="2"
-            android:gravity="left"
-            android:orientation="horizontal">
+    <LinearLayout
+        android:padding="5dp"
+        android:id="@+id/non_graphical_info_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="210dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:contentDescription=""
-                android:id="@+id/value_barchart"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:clickable="false"/>
+        <com.github.mikephil.charting.charts.BarChart
+            android:contentDescription=""
+            android:id="@+id/value_barchart"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"
+            android:clickable="false"/>
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:contentDescription=""
-                android:id="@+id/probability_barchart"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:clickable="false"/>
+        <com.github.mikephil.charting.charts.BarChart
+            android:contentDescription=""
+            android:id="@+id/probability_barchart"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"
+            android:clickable="false"/>
 
-        </LinearLayout>
-    </TableRow>
+    </LinearLayout>
 
     <TableRow
         android:id="@+id/tableRow2"
@@ -53,43 +50,43 @@
                 android:paddingLeft="5dp"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/text_info_0"
+                    android:id="@+id/number_of_total_cases_textview"
                     android:text="Kaikki"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_1"
+                    android:id="@+id/number_of_nothing_cases_textview"
                     android:text="Ei mitään"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_2"
+                    android:id="@+id/number_of_twopares_cases_textview"
                     android:text="Kaksi paria"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_3"
+                    android:id="@+id/number_of_threeofakind_cases_textview"
                     android:text="Kolme samaa"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_4"
+                    android:id="@+id/number_of_straights_cases_textview"
                     android:text="Suora"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_5"
+                    android:id="@+id/number_of_flush_cases_textview"
                     android:text="Väri"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_6"
+                    android:id="@+id/number_of_fullhouse_cases_textview"
                     android:text="Täyskäsi"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_7"
+                    android:id="@+id/number_of_fourofakind_cases_textview"
                     android:text="Neljä samaa"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_8"
+                    android:id="@+id/number_of_straightflush_cases_textview"
                     android:text="Värisuora"
                     style="@style/case_text_textview"/>
                 <TextView
-                    android:id="@+id/text_info_9"
+                    android:id="@+id/number_of_fiveofakind_cases_textview"
                     android:text="Viisi samaa"
                     style="@style/case_text_textview"/>
             </LinearLayout>
