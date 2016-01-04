@@ -1,4 +1,4 @@
-# AndroidJokeriPokeri #Pure torture. 
+# AndroidJokeriPokeri
 My very first app ever from summer 2015. A pile of code and no comments. 
 I wonder, how in the heck did i ever got it to work in the first place. 
 ![card_select_activity](https://cloud.githubusercontent.com/assets/11061511/11901075/3e1a1fbc-a5b2-11e5-9ca4-1ce6f4de2d5d.png)
